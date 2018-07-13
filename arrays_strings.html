@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Main Page</title>
+</head>
+<body>
+<script>
+
+// create object with one property - className
+var obj = {
+  className: 'open menu'
+};
+
+// create function that will add new classes to className
+function addClass(obj, cls){
+  var split = obj.className.split(" ");
+  for ( var i = 0; i < split.length; i++){
+    if (arguments[1] == split[i]){ break;}
+    if ((split.length-1) ==  i) {
+      split.push(arguments[1]);
+    }
+  }
+  obj.className = split.join(" ");
+};
+
+// create function that will remove classes from className if they axists
+function removeClass(obj, open){
+  var split = obj.className.split(" ");
+  for ( var i = 0; i < split.length; i++){
+    if (arguments[1] == split[i]){
+      split.splice(i,1);
+    }
+    if ((split.length-1) ==  i) { break;}
+  }
+  obj.className = split.join(" ");
+};
+
+addClass(obj, 'fu');
+removeClass(obj, 'menu');
+alert( obj.className );
+</script>
+</body>
+</html>
