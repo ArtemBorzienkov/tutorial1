@@ -7,6 +7,10 @@
 <body>
 <script>
 
+/* exercise is to create properties like firstName and lastName
+not only for getting but for setting as well, while
+object User should remains unchangeble */
+
 function User(fullName) {
 
     this.fullName = fullName;
@@ -40,6 +44,30 @@ vasya.lastName = 'Semenov';
 
 alert( vasya.fullName );
 
+/* exercise is to create a function applyAll() which will obtain
+another function as a first argument like maxNum() or minNum()
+with their arguments and return required result */
+
+function maxNum(){
+  var args = [].slice.apply(arguments);
+  return (Math.max.apply(null,args));
+};
+
+function minNum(){
+  var args = [].slice.apply(arguments);
+  return (Math.min.apply(null,args));
+};
+
+function sumArgs() {
+  var args = [].slice.apply(arguments);
+  return args.reduce(function (a,b){ return a + b })
+};
+
+function applyAll(funct){
+  return funct.apply(this, [].splice.call(arguments,1));
+};
+
+alert(applyAll(maxNum,1,7,5));
 
 </script>
 </body>
