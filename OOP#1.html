@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Main Page</title>
+</head>
+<body>
+<script>
+
+/* The task is to create class Fridge(power) inheritor of Machine(power)
+   with private property food and methods addFood(), getFood().
+    - private property food is array;
+    - public method addFood(item) adds new items into food array
+    - if the Fridge is disabled no food can be added
+    - maximal number of food items is limited by -> power/100
+    - public method getFood() returns food array
+*/
+
+function Machine(power) {
+  this._power = power;
+  this._enabled = false;
+
+  var self = this;
+
+  this.enable = function() {
+    self._enabled = true;
+  };
+
+  this.disable = function() {
+    self._enabled = false;
+  };
+};
+
+
+function Fridge (power){
+
+  Machine.apply(this,arguments);
+
+  var food = [];
+
+  var maxFoodAmount = this._power/100;
+
+  this.addFood = function(items){
+    var args = [].slice.call(arguments);
+
+    var foodAmout = args.length;
+
+   if (!this._enabled){
+    throw new Error ("Turn on the fridge");
+   }
+   else if (maxFoodAmount < food.length + 1 + foodAmout){
+    throw new Error ("Too much food");
+   }
+   else {
+    food.push(args)
+   }
+  };
+
+  this.getFood = function(){
+    return food
+  };
+};
+
+var fridge = new Fridge(500);
+fridge.enable();
+fridge.addFood("meat");
+fridge.addFood("juice", "fruits");
+fridge.addFood("jam", "cookie", "milk");
+
+
+</script>
+</body>
+</html>
