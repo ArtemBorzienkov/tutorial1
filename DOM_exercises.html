@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Main Page</title>
+</head>
+<body>
+<h1>Creation of list</h1>
+<ul id ="ul">
+</ul>
+<script>
+/*
+Task is to create list interface.
+      For each list item:
+      - prompt function should colected input info;
+      - created item must be add to <ul>;
+      - process continues until user cancel prompt function
+ */
+    var ul = document.getElementById("ul");
+    do { text = prompt("Type in","");
+         var li = document.createElement('li');
+         li.appendChild(document.createTextNode(text));
+         ul.appendChild(li);
+       } while (text);
+    ul.removeChild(ul.lastChild);
+</script>
+</body>
+</html>
