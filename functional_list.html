@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+</head>
+
+<body>
+  <!--
+   Task is to create a tree, which:
+     - if user click on head children items appear and disapear;
+     - all list items to be highlighted when cursor on this item;
+     - in case of click outside of tree nothing happens;
+   -->
+  <ul class="tree">
+  <li>FirstClass
+    <ul>
+      <li>FirstPodClass
+        <ul>
+          <li>one</li>
+          <li>two</li>
+          <li>three</li>
+          <li>four</li>
+        </ul>
+      </li>
+      <li>SecondPodClass
+        <ul>
+          <li>one</li>
+          <li>two</li>
+          <li>three</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>SecondClass
+    <ul>
+      <li>FirstPodClass
+        <ul>
+          <li>one</li>
+          <li>two</li>
+        </ul>
+
+      </li>
+      <li>SecondPodClass
+        <ul>
+          <li>one</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+</body>
+
+<script>
+
+var treeUl = document.getElementsByTagName("ul")[0];
+
+var treeLi = document.getElementsByTagName("li");
+
+for (var i = 0; i < treeLi.length; i++){
+  var li = treeLi[i];
+
+  var span = document.createElement("span");
+  span.className = "item";
+  li.insertBefore(span, li.firstChild);
+  span.appendChild(span.nextSibling);
+};
+
+var tree = document.getElementsByTagName('ul')[0];
+
+tree.onclick = function(event) {
+  var target = event.target;
+
+  if (target.tagName != 'SPAN') {
+    return;
+  }
+
+  var li = target.parentNode;
+
+  var childrenContainer = li.getElementsByTagName('ul')[0];
+
+  if (!childrenContainer) return;
+
+  childrenContainer.hidden = !childrenContainer.hidden;
+}
+
+</script>
+
+<style>
+span {
+    border: 1px transparent;
+  }
+.item:hover{
+  background-color: pink;
+  text-decoration: underline;
+}
+</style>
+</body>
+</html>
