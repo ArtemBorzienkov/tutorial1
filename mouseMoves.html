@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<style>
+  #mouse {
+    display: inline-block;
+    cursor: pointer;
+    margin: 0;
+  }
+
+  #mouse:focus {
+    outline: 1px dashed black;
+  }
+  .helloUser {
+      padding: 10px 20px;
+      /* красивости... */
+
+      border: 1px solid #b3c9ce;
+      border-radius: 4px;
+      text-align: center;
+      font: italic 14px/1.3 arial, sans-serif;
+      color: #333;
+      background: #fff;
+      box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
+    }
+</style>
+</head>
+
+<body>
+<button id = "animation">Animate Mouse</button>
+<h3>Click on the mouse icon, then use arrow buttons to trasfer him :)</h3>
+
+<pre id="mouse">
+  _   _
+ (q\_/p)
+  /. .\
+ =\_t_/=   __
+  /   \   (
+ ((   ))   )
+ /\) (/\  /
+ \  Y  /-'
+  nn^nn
+ </pre>
+
+
+
+
+<script>
+
+var mouse = document.getElementById("mouse");
+mouse.style.position = "absolute";
+var clicked;
+
+mouse.onclick = function(e){
+  clicked = true;
+  mouse.style.zIndex = 1000;
+}
+
+
+function mooveRight(){
+  var style = getComputedStyle(mouse).left;
+  var newP = 20 + parseFloat(style);
+  mouse.style.left = newP + "px";
+  var i = 0;
+  i++;
+};
+
+function mooveLeft(){
+  var style = getComputedStyle(mouse).left;
+  var newP = parseFloat(style) - 20;
+  mouse.style.left = newP + "px";
+  var i = 0;
+  i++;
+};
+
+function mooveBottom(){
+  var style = getComputedStyle(mouse).top;
+  var newP = 20 + parseFloat(style);
+  mouse.style.top = newP + "px";
+  var i = 0;
+  i++;
+};
+
+function mooveTop(){
+  var style = getComputedStyle(mouse).top;
+  var newP = parseFloat(style) - 20;
+  mouse.style.top = newP + "px";
+  var i = 0;
+  i++;
+};
+
+
+document.body.onkeydown = function(event){
+  var keyCode = event.charCode || event.keyCode;
+  if (clicked){
+    if (keyCode === 39){
+      mooveRight();
+    }
+    if (keyCode === 37){
+      mooveLeft();
+    }
+    if (keyCode === 38){
+      mooveTop();
+    }
+    if (keyCode === 40){
+      mooveBottom();
+    }
+  }
+}
+
+function hello(){
+
+  var mousePosition = getComputedStyle(mouse);
+  var greeting = document.createElement("span");
+  greeting.innerHTML = "Hello User!";
+  greeting.className = "helloUser";
+  document.body.appendChild(greeting);
+  greeting.style.position = "fixed";
+  greeting.style.left = "justified";
+  greeting.style.marginTop = "120px";
+};
+
+
+document.getElementById("animation").onclick = function(){
+  var rightJump = setInterval(mooveRight, 200);
+  var botJump = setInterval(mooveBottom, 200);
+
+  setTimeout(function(){
+    clearInterval(rightJump);
+    clearInterval(botJump);
+  }, 1600);
+
+  var helloUser = setInterval(hello, 1800);
+
+  setTimeout(function(){
+    clearInterval(helloUser);
+}, 2400);
+}
+</script>
+
+</body>
+
+</html>
