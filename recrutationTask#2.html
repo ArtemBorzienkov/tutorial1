@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Main Page</title>
+  <!--
+Create CRUD comments application. Main form is supposed to consist of two text and one file inputs.
+User can comment an existing comment. No authorization required.
+Front-end part: You can use any modern framework, library or vanilla js.
+Back-end part: You can use any Node.js based framework.
+Try to use Rest API approach.
+
+Will be a plus:
+1. Add form validation.
+2. Accept only jpg, png as user avatar.
+3. Add confirmation window before remove comment.
+  -->
+<style>
+body {
+  position: absolute;
+  left: 35%;
+  max-width: 315px;
+  border: 1px solid;
+}
+
+form .author{
+  width: 100%;
+  margin-top: 10px;
+}
+
+form .fileButton{
+  margin-top: 10px;
+}
+
+form .button{
+  position: relative;
+  margin-top: 10px;
+  left: 80%;
+}
+
+.outputContent{
+  position: absolute;
+  margin-top: 30px;
+  border = 1px solid;
+}
+#delteEditButtons:hover{
+  cursor: alias;
+  font-weight: bold;
+  font-style: italic;
+}
+
+#replyButton:hover{
+  cursor: alias;
+  font-weight: bold;
+  font-style: italic;
+}
+
+</style>
+</head>
+
+<body>
+  <div>
+    <form name="content">
+        <textarea name="text" class="comment" rows="6" cols="50" class="form-control"
+          placeholder="Comment Text"></textarea>
+        <input name="author" class="author" id="messageAuthor" placeholder="Author Name"></input>
+        <input name="fileImg" class="fileButton" type="file"></input>
+        <div class="button">
+          <button type="submit" id="subButton">Comment</button>
+        </div>
+    </form>
+  </div>
+  <div class ="outputContent" id="output">
+  </div>
+
+  <script>
+
+  var form = document.forms.content;
+  var input = form.elements.fileImg;
+
+  var submit = document.getElementById("subButton");
+  var output = document.getElementById("output");
+
+  var number = 0;
+/*
+Validation for input images acomplished using fileTypes=[] variable
+and function validFileType(file) which checkes if the file has
+appropriate format
+ */
+  var fileTypes = [
+    'image/jpeg',
+    'image/pjpeg',
+    'image/png'
+  ];
+
+  function validFileType(file) {
+    for(var i = 0; i < fileTypes.length; i++) {
+      if(file.type === fileTypes[i]) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  /*
+  function addImage() will create image tag in DOM
+  and set required characteristics to image
+   */
+
+  function addImage(){
+
+    var newImg = document.createElement("img");
+
+    for (var i = 0; i < input.files.length; i++){
+        if(validFileType(input.files[i])){
+          newImg.src = window.URL.createObjectURL(input.files[i]);
+          newImg.style.height = "72px";
+          newImg.style.width = "72px";
+          newImg.style.marginLeft = "0px";
+        }
+        else{
+          alert("The type of uploaded file is not supported")
+        }
+     }
+
+     if(input.files.length == 0){
+        newImg.src = "https://rafver.is/wp-content/uploads/2016/05/no-image.jpg";
+        newImg.style.height = "72px";
+        newImg.style.width = "72px";
+        newImg.style.marginLeft = "0px";
+     }
+
+    output.lastChild.appendChild(newImg);
+  };
+  /*
+  function addText() and addAuthor() will create comment text
+   and author name tags in DOM
+   */
+
+  function addText(){
+    var commentText = form.elements.text;
+    var p = document.createElement("p");
+    p.innerHTML = commentText.value;
+    p.className = "text" + number;
+    p.style.width = "250px";
+    p.style.fontSize = "small";
+    p.style.maxHeight = "50px";
+    p.style.position = "absolute";
+    p.style.border = " 1px transparent";
+    p.style.top = "20%";
+    p.style.marginLeft = "80px";
+    output.lastChild.appendChild(p);
+  };
+
+  function addAuthor(){
+    var authorText = form.elements.author;
+    var headline = document.createElement("h4");
+    headline.innerHTML = authorText.value;
+    headline.className = "author" + number;
+    headline.style.border = "1px transparent";
+    headline.style.width = "200px";
+    headline.style.position = "absolute";
+    headline.style.textAlign = "center";
+    headline.style.top = "-22px";
+    headline.style.marginLeft = "75px";
+    output.lastChild.appendChild(headline);
+  };
+  /*
+  function addButtons() and reply() will create "Edit | Delete" buttons
+   and reply button;
+   Additionally, proper events on these buttons should be set as well
+   */
+
+  function addButtons(){
+    var additionalButtons = document.createElement("span");
+    additionalButtons.innerHTML = "Edit | Delete";
+    additionalButtons.style.width = "80px";
+    additionalButtons.style.border = "1px transparent";
+    additionalButtons.style.textAlign = "right";
+    additionalButtons.style.fontSize = "small";
+    additionalButtons.style.position = "absolute";
+    additionalButtons.style.textDecoration = "underline";
+    additionalButtons.style.color = "blue";
+    additionalButtons.style.top = "0px";
+    additionalButtons.style.marginLeft = "210px";
+
+    additionalButtons.id = "delteEditButtons";
+
+    output.lastChild.appendChild(additionalButtons);
+
+    additionalButtons.onclick = function(event){
+      var target = event.target;
+
+      function getCoords(elem) {
+        var box = elem.getBoundingClientRect();
+        return {
+          top: box.top + pageYOffset,
+          left: box.left + pageXOffset
+        }
+      };
+
+      var result = getCoords(target);
+      var postNum = ((result.top/100).toFixed(0) - 1);
+
+      var deleteConfirm = confirm("Do you want to delete this post?");
+
+      if(deleteConfirm){
+        number = postNum;
+        var curPost = document.getElementsByClassName("div" + postNum);
+        for (var i = 0; i < curPost.length; i++){
+            output.removeChild(curPost[i]);
+        }
+      }
+      else if(!deleteConfirm){
+        var editConfirm = confirm("Do you want to edit this post?");
+        if(editConfirm){
+          var promptAuthor = prompt("Provide a new author");
+          var changeAuthor = document.getElementsByClassName("author" + postNum);
+          if(promptAuthor){
+            for (var i = 0; i < changeAuthor.length; i++){
+              changeAuthor[i].innerHTML = promptAuthor;
+            }
+          };
+
+          var promptComment = prompt("Provide a new comment text");
+          var changeComment = document.getElementsByClassName("text" + postNum);
+          if(promptComment){
+            for (var i = 0; i < changeComment.length; i++){
+              changeComment[i].innerHTML = promptComment;
+            }
+          }
+        }
+      }
+    }
+  };
+
+
+  function addReply(){
+    var replyButton = document.createElement("span");
+    replyButton.innerHTML = "Reply";
+    replyButton.style.width = "50px";
+    replyButton.style.border = "1px transparent";
+    replyButton.style.textAlign = "left";
+    replyButton.style.fontSize = "small";
+    replyButton.style.position = "absolute";
+    replyButton.style.textDecoration = "underline";
+    replyButton.style.color = "blue";
+    replyButton.style.top = "100%";
+    replyButton.style.marginLeft = "20%";
+    replyButton.id = "replyButton";
+
+    output.lastChild.appendChild(replyButton);
+
+    replyButton.onclick = function(){
+      alert("This option will be available soon ;)")
+    }
+  }
+
+  /*
+  submit button will realise all nessecary functions
+   */
+  submit.onclick = function(e){
+    e.preventDefault();
+    number++;
+    var newDiv = document.createElement("div");
+    newDiv.className = "div" + number;
+    newDiv.style.position = "absolute";
+    var top = number * 100;
+    newDiv.style.border = "1px solid";
+    newDiv.style.top = top - "100" + "px";
+    newDiv.style.height = "80px";
+    if(number % 2 == 0){
+      newDiv.style.marginLeft = "50px";
+    }
+    else{
+      newDiv.style.marginLeft = "0px";
+    };
+    output.appendChild(newDiv);
+
+    addImage();
+    addAuthor();
+    addText();
+    addButtons();
+    addReply();
+  }
+
+  </script>
+</body>
+</html>
