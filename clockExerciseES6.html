@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Main Page</title>
+  <style>
+    .hour {
+      color: green
+    }
+
+    .min {
+      color: blue
+    }
+
+    .sec {
+      color: red
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="clock" class="clock">
+    <span class="hour">00</span>:<span class="min">00</span>:<span class="sec">00</span>
+  </div>
+
+  <script>
+/*
+
+*/
+    let pageClock = new Clock({
+      elem: document.getElementById('clock')
+    });
+
+   function Clock(options){
+     let elem = options.elem;
+
+     let timer;
+
+     let render = () => {
+       let date = new Date();
+
+       // hours
+       let hours = document.querySelector(".hour");
+       hours.innerHTML = date.getHours();
+
+       // minutes
+       let mins = document.querySelector(".min");
+       mins.innerHTML = date.getMinutes();
+
+       // seconds
+       let secs = document.querySelector(".sec");
+       secs.innerHTML = date.getSeconds();
+     }
+
+     this.start = () => timer = setInterval(render, 1000);
+
+     this.stop = () => clearInterval(timer);
+  }
+  </script>
+<form name="buttons">
+  <input type="button" onclick="pageClock.start()" value="Старт">
+  <input type="button" onclick="pageClock.stop()" value="Стоп">
+  <input type="button" onclick="alert('Часы должны останавливаться во время alert,\nи продолжать корректно работать после нажатия на ОК')" value="alert для проверки корректного возобновления">
+</form>
+</body>
+
+</html>
